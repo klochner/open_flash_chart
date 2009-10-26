@@ -44,10 +44,8 @@ module OpenFlashChart
         if key == "elements"
           hash[key] = val.map{|e| e.to_renderable}
         elsif val.class.name =~ /OpenFlashChart/
-          puts "returning to_renderable on #{val.class.name} #{val.to_s}"
           hash[key] = val.to_renderable
         else
-          puts "returning val for #{val.class.name}  #{val.to_s}"
           hash[key] = val 
         end
         hash
