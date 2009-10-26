@@ -52,7 +52,7 @@ module OpenFlashChart
       end
     end
     
-    #alias_method :to_s, :render
+    alias_method :to_s, :render
 
     def add_element(element)
       @elements ||= []
