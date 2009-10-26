@@ -1,6 +1,7 @@
 module OpenFlashChart
   class Base
-
+    attr_accessor :elements
+    attr_accessor :title
     def initialize(args={})
       # set all the instance variables we want
       # assuming something like this OpenFlashChart.new(:x_axis => 5, :y_axis => 10, :elements => ["one", "two"], ...)
@@ -33,10 +34,27 @@ module OpenFlashChart
     end
 
     def to_json2
-      self.instance_values.to_json
+      #self.instance_values.to_json
+      self.to_renderable.to_json
     end    
 
-    alias_method :to_s, :render
+    def to_renderable
+      self.instance_values.inject({}) do |hash,key_val_arr|
+        key,val = key_val_arr
+        if key == "elements"
+          hash[key] = val.map{|e| e.to_renderable}
+        elsif val.class.name =~ /OpenFlashChart/
+          puts "returning to_renderable on #{val.class.name} #{val.to_s}"
+          hash[key] = val.to_renderable
+        else
+          puts "returning val for #{val.class.name}  #{val.to_s}"
+          hash[key] = val 
+        end
+        hash
+      end
+    end
+    
+    #alias_method :to_s, :render
 
     def add_element(element)
       @elements ||= []
